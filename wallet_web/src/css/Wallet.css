@@ -1,0 +1,44 @@
+
+#Tabs{
+
+    width: 30%;
+
+    margin: auto;
+    
+}
+
+#User_Title{
+
+    text-align: center;
+
+    height: 175px;
+
+}
+
+.User_Tab{
+
+    text-align: center;
+    
+}
+
+.Input_DIV{
+
+    text-align: center;
+
+    padding-top: 25px;
+    
+}
+
+.AlertMsg{
+
+    padding-top: 15px;
+
+    color: red;
+    
+}
+
+.HiddenAlertMsg{
+
+    display: none;
+    
+}
