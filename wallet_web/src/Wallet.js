@@ -14,8 +14,6 @@ class Wallets extends React.Component {
 
     super(props);
 
-    this.get_Wallets();
-
   }
 
   render() {
@@ -60,49 +58,13 @@ class Wallets extends React.Component {
 
       this.wallets = result;
 
-      console.log(this.wallets);
-
       let element = (
-
-
 
         this.wallets?.map(wallet => (
 
-          <>
-            <div className="Input_DIV">
+          <Wallet wallet={wallet} />
 
-              <h4>{wallet["Wallet"]}:</h4>
-
-              <h5>Balance: {wallet["Balance"]}</h5>
-
-            </div>
-
-            <div className="Input_DIV">
-
-              <h5>Received: {wallet["Received"]}, Sent: {wallet["Sent"]}</h5>
-
-            </div>
-
-            <div className="Input_DIV">
-
-              <h5>Addresses: </h5>
-
-              {wallet["Addresses"].map(addr => (<h6>{addr}</h6>))}
-
-            </div>
-
-            <div className="Input_DIV">
-
-              Address: <input id='Addr' ref={value => this.addr = value} placeholder='Enter Target Address' />,
-
-              Value: <input id='Value' ref={value => this.value = value} placeholder='Enter Value' />
-
-              <Button variant='primary' onClick={this.create_Transaction.bind(this, wallet["Wallet"])}>Submit Transaction</Button>
-
-            </div></>
         ))
-
-
 
       );
 
@@ -120,15 +82,16 @@ class Wallets extends React.Component {
 
       body: JSON.stringify({
 
-        wallet_name: this.walletName,
+        wallet_name: this.walletName.value,
 
       }),
 
     }
     );
 
-    let result = await response.json();
+    let result = (await response).json();
 
+    window.location.reload();
 
   }
 
@@ -140,14 +103,14 @@ class Wallets extends React.Component {
 
       body: JSON.stringify({
 
-        wallet: this.walletName,
+        wallet: this.walletName.value,
 
       }),
 
     }
     );
 
-    let result = await response.json();
+    let result = (await response).json();
 
 
   }
@@ -162,24 +125,89 @@ class Wallets extends React.Component {
 
         input: wallet,
 
-        output: this.addr,
+        output: this.addr.value,
 
-        value: this.value,
+        value: this.value.value,
 
       }),
 
     }
     );
 
-    let result = await response.json();
+    let result = (await response).json();
+
+    window.location.reload();
 
   }
 
   componentWillMount() {
 
-
-
     this.get_Wallets();
+
+  }
+
+}
+
+class Wallet extends React.Component {
+
+  render() {
+
+    this.wallet = this.props.wallet;
+
+    return (
+
+      <>
+        <div className="Input_DIV">
+
+          <h4>{this.wallet["Wallet"]}:</h4>
+
+          Balance: {this.wallet["Balance"]}, Received: {this.wallet["Received"]}, Sent: {this.wallet["Sent"]}
+
+        </div>
+
+        <div className="Input_DIV">
+
+          <h5>Addresses: </h5>
+
+          {this.wallet["Addresses"].map(addr => (<h6>{addr}</h6>))}
+
+        </div>
+
+        <div className="Input_DIV">
+
+          Address: <input id='Addr' ref={value => this.addr = value} placeholder='Enter Target Address' />,
+
+          Value: <input id='Value' ref={value => this.value = value} placeholder='Enter Value' />
+
+          <Button variant='primary' onClick={this.create_Transaction.bind(this, this.wallet["Wallet"])}>Submit Transaction</Button>
+
+        </div></>
+    )
+
+  }
+
+  async create_Transaction(wallet) {
+
+    let response = fetch('startTransaction/', {
+
+      method: 'POST',
+
+      body: JSON.stringify({
+
+        input: wallet,
+
+        output: this.addr.value,
+
+        value: this.value.value,
+
+      }),
+
+    }
+    );
+
+    let result = (await response).json();
+
+    window.location.reload();
 
   }
 

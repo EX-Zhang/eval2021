@@ -9,7 +9,7 @@ from django.db import models
 
 
 class Address(models.Model):
-    username = models.CharField(primary_key=True, max_length=255)
+    username = models.CharField(max_length=255)
     address = models.CharField(max_length=255)
     wallet = models.CharField(max_length=255)
     private = models.CharField(max_length=255)
@@ -19,15 +19,12 @@ class Address(models.Model):
     class Meta:
         managed = False
         db_table = 'address'
-        unique_together = (('username', 'address', 'wallet'),)
 
 
 class Wallet(models.Model):
-    username = models.CharField(primary_key=True, max_length=255)
+    username = models.CharField(max_length=255)
     wallet = models.CharField(max_length=255)
 
     class Meta:
         managed = False
         db_table = 'wallet'
-        unique_together = (('username', 'wallet'),)
-

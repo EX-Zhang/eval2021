@@ -19,15 +19,21 @@ def add_Address(username, address, wallet):
 
 def add_Wallet(username, wallet):
 
+    if len(Wallet.objects.filter(username=username,wallet=wallet)) != 0:
+
+        return {"error":"wallet exist"}
+
     new_wallet = Wallet(username=username,wallet=wallet)
 
     new_wallet.save()
 
-def del_Wallet(username, wallet):
+def del_Wallet(username, wallet, api_key):
 
-    wal = Wallet.objects.get(username=username,wallet=wallet)
+    delete_Wallet(wallet,api_key)
 
-    wal.delete()
+    Wallet.objects.get(username=username,wallet=wallet).delete()
+
+    Address.objects.filter(username=username, wallet=wallet).delete()
 
 def get_Addresses(username, wallet):
 
@@ -70,3 +76,7 @@ def getWallets(username, api_key):
         results.append(result)
 
     return results
+
+def getAddress(address):
+
+    return Address.objects.get(address=address)

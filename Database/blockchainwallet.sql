@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 80028
 File Encoding         : 65001
 
-Date: 2022-11-16 19:11:36
+Date: 2022-11-24 08:43:39
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -20,14 +20,15 @@ SET FOREIGN_KEY_CHECKS=0;
 -- ----------------------------
 DROP TABLE IF EXISTS `address`;
 CREATE TABLE `address` (
+  `id` int NOT NULL AUTO_INCREMENT,
   `username` varchar(255) NOT NULL,
   `address` varchar(255) NOT NULL,
   `wallet` varchar(255) NOT NULL,
   `private` varchar(255) NOT NULL,
   `public` varchar(255) NOT NULL,
   `wif` varchar(255) NOT NULL,
-  PRIMARY KEY (`username`,`address`,`wallet`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- ----------------------------
 -- Table structure for django_content_type
@@ -72,7 +73,8 @@ CREATE TABLE `user` (
 -- ----------------------------
 DROP TABLE IF EXISTS `wallet`;
 CREATE TABLE `wallet` (
+  `id` int NOT NULL AUTO_INCREMENT,
   `username` varchar(255) NOT NULL,
   `wallet` varchar(255) NOT NULL,
-  PRIMARY KEY (`username`,`wallet`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
