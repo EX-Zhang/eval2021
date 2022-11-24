@@ -13,6 +13,8 @@ urlpatterns = [
 
     path("addAddr/",views.add_addr),
 
+    path("deleteWallet/",views.delete_Wallet),
+
     path("",views.index),
 
 ]

@@ -3,7 +3,7 @@ import React from "react";
 
 import * as ReactDOM from "react-dom";
 
-import { Button } from "react-bootstrap";
+import { Button, Alert, Accordion } from "react-bootstrap";
 
 import "./css/bootstrap.min.css";
 import "./css/Wallet.css";
@@ -24,11 +24,15 @@ class Wallets extends React.Component {
 
         <div id="NewWallet" className="Input_DIV">
 
-          Wallet Name:
+          <Alert key='dark' variant='light'>
 
-          <input id="WalletName" ref={value => this.walletName = value} placeholder="Enter Wallet Name" />
+            Wallet Name:
 
-          <Button variant="primary" onClick={this.create_New_Wallet.bind(this)}>New Wallet</Button>
+            <input id="WalletName" ref={value => this.walletName = value} placeholder="Enter Wallet Name" />
+
+            <Button variant="primary" onClick={this.create_New_Wallet.bind(this)}>New Wallet</Button>
+
+          </Alert>
 
         </div>
 
@@ -54,17 +58,23 @@ class Wallets extends React.Component {
 
     let result = (await response).json();
 
+    let wallet_id = 0;
+
     result.then((result) => {
 
       this.wallets = result;
 
       let element = (
 
-        this.wallets?.map(wallet => (
+        <Accordion defaultActiveKey="0">
 
-          <Wallet wallet={wallet} />
+          {this.wallets?.map(wallet => (
 
-        ))
+            <Wallet wallet={wallet} wallet_id={wallet_id++} />
+
+          ))}
+
+        </Accordion>
 
       );
 
@@ -154,34 +164,54 @@ class Wallet extends React.Component {
 
     this.wallet = this.props.wallet;
 
+    this.wallet_id = "" + this.props.wallet_id;
+
     return (
 
-      <>
-        <div className="Input_DIV">
+      <Accordion.Item eventKey={this.wallet_id}>
 
-          <h4>{this.wallet["Wallet"]}:</h4>
+        <Accordion.Header>{this.wallet["Wallet"]}</Accordion.Header>
 
-          Balance: {this.wallet["Balance"]}, Received: {this.wallet["Received"]}, Sent: {this.wallet["Sent"]}
+        <Accordion.Body>
 
-        </div>
+          <div className="Input_DIV">
 
-        <div className="Input_DIV">
+            <Alert key='dark' variant='light'>
 
-          <h5>Addresses: </h5>
+              <h5>Balance: {this.wallet["Balance"]}, Received: {this.wallet["Received"]}, Sent: {this.wallet["Sent"]}</h5>
 
-          {this.wallet["Addresses"].map(addr => (<h6>{addr}</h6>))}
+            </Alert>
 
-        </div>
+            <h5>Addresses: </h5>
 
-        <div className="Input_DIV">
+            {this.wallet["Addresses"].map(addr => (<h6>{addr}</h6>))}
 
-          Address: <input id='Addr' ref={value => this.addr = value} placeholder='Enter Target Address' />,
+          </div>
 
-          Value: <input id='Value' ref={value => this.value = value} placeholder='Enter Value' />
+          <div className="Input_DIV">
 
-          <Button variant='primary' onClick={this.create_Transaction.bind(this, this.wallet["Wallet"])}>Submit Transaction</Button>
+            Address: <input id='Addr' ref={value => this.addr = value} placeholder='Enter Target Address' />,
 
-        </div></>
+            Value: <input id='Value' ref={value => this.value = value} placeholder='Enter Value' />
+
+          </div>
+
+          <div id="WalletBtnDIV">
+
+            <Alert key='dark' variant='light'>
+
+              <Button variant='primary' onClick={this.create_Transaction.bind(this, this.wallet["Wallet"])}>Submit Transaction</Button>
+
+              <Button variant='danger' onClick={this.delete_Wallet.bind(this, this.wallet["Wallet"])}>Delete Wallet</Button>
+
+            </Alert>
+
+          </div>
+
+        </Accordion.Body>
+
+      </Accordion.Item>
+
     )
 
   }
@@ -204,6 +234,32 @@ class Wallet extends React.Component {
 
     }
     );
+
+    let result = (await response).json();
+
+    window.location.reload();
+
+  }
+
+  async delete_Wallet(wallet) {
+
+    if (!window.confirm("Delete wallet '" + wallet + "'?")) {
+
+      return;
+
+    }
+
+    let response = fetch('deleteWallet/', {
+
+      method: 'POST',
+
+      body: JSON.stringify({
+
+        wallet: wallet,
+
+      }),
+
+    });
 
     let result = (await response).json();
 

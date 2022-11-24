@@ -31,7 +31,7 @@ def del_Wallet(username, wallet, api_key):
 
     delete_Wallet(wallet,api_key)
 
-    Wallet.objects.get(username=username,wallet=wallet).delete()
+    Wallet.objects.filter(username=username,wallet=wallet).delete()
 
     Address.objects.filter(username=username, wallet=wallet).delete()
 
@@ -51,7 +51,7 @@ def getWallets(username, api_key):
 
     results = []
 
-    wallets = Wallet.objects.filter(username=username)
+    wallets = Wallet.objects.filter(username=username).order_by("wallet")
 
     for wallet in wallets:
 
