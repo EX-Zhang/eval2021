@@ -50,6 +50,12 @@ def start_Transaction(input_addrs, output_addr, value, api_key):
 
     unsigned_tx = blockcypher.create_unsigned_tx(inputs,outputs,api_key=api_key,include_tosigntx=True,coin_symbol='btc-testnet')
 
+    for i in range(len(unsigned_tx["tosign"])-len(private_list)):
+
+        private_list.append(private_list[-1])
+
+        public_list.append(public_list[-1])
+
     signature = blockcypher.make_tx_signatures(unsigned_tx["tosign"],private_list,public_list)
 
     return blockcypher.broadcast_signed_transaction(unsigned_tx,signature,public_list,api_key=api_key,coin_symbol='btc-testnet')
